@@ -3,7 +3,7 @@ pipeline {
     agent any
  
     stages {
-
+ 
         stage('Checkout') {
 
             steps {
@@ -60,9 +60,43 @@ pipeline {
 
             steps {
 
-                echo 'Deploying to staging server'
+                sh '''
+
+                docker save flask-task-app > flask-task-app.tar
+ 
+                scp -o StrictHostKeyChecking=no flask-task-app.tar ubuntu@3.66.157.209:/home/ubuntu/
+ 
+                ssh -o StrictHostKeyChecking=no ubuntu@3.66.157.209 "
+
+                docker load < /home/ubuntu/flask-task-app.tar &&
+
+                docker stop flask-task-app || true &&
+
+                docker rm flask-task-app || true &&
+
+                docker run -d --name flask-task-app -p 5000:5000 flask-task-app
+
+                "
+
+                '''
 
             }
+
+        }
+
+    }
+ 
+    post {
+
+        success {
+
+            echo 'Pipeline completed successfully'
+
+        }
+ 
+        failure {
+
+            echo 'Pipeline failed'
 
         }
 
