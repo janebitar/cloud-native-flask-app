@@ -64,9 +64,9 @@ pipeline {
 
                 docker save flask-task-app > flask-task-app.tar
  
-                scp -o StrictHostKeyChecking=no flask-task-app.tar ubuntu@3.66.157.209:/home/ubuntu/
+                scp -o StrictHostKeyChecking=no flask-task-app.tar ubuntu@35.159.46.31:/home/ubuntu/
  
-                ssh -o StrictHostKeyChecking=no ubuntu@3.66.157.209 "
+                ssh -o StrictHostKeyChecking=no ubuntu@35.159.46.31 "
 
                 docker load < /home/ubuntu/flask-task-app.tar &&
 
